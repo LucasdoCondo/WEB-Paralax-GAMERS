@@ -10,6 +10,7 @@ interface StoreState {
   search: string;
   category: Category | 'todos';
   sort: SortOption;
+  selected: Product | null;
   setCartOpen: (open: boolean) => void;
   addToCart: (product: Product, qty?: number) => void;
   removeFromCart: (id: string) => void;
@@ -20,6 +21,8 @@ interface StoreState {
   setSearch: (value: string) => void;
   setCategory: (c: Category | 'todos') => void;
   setSort: (s: SortOption) => void;
+  openProduct: (p: Product) => void;
+  closeProduct: () => void;
 }
 
 const StoreContext = createContext<StoreState | null>(null);
@@ -31,6 +34,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState<Category | 'todos'>('todos');
   const [sort, setSort] = useState<SortOption>('relevance');
+  const [selected, setSelected] = useState<Product | null>(null);
+
+  const openProduct = useCallback((p: Product) => setSelected(p), []);
+  const closeProduct = useCallback(() => setSelected(null), []);
 
   const addToCart = useCallback((product: Product, qty = 1) => {
     setItems((prev) => {
@@ -82,6 +89,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       search,
       category,
       sort,
+      selected,
       setCartOpen,
       addToCart,
       removeFromCart,
@@ -92,8 +100,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       setSearch,
       setCategory,
       setSort,
+      openProduct,
+      closeProduct,
     }),
-    [items, cartOpen, cartCount, cartTotal, favorites, search, category, sort, addToCart, removeFromCart, updateQty, clearCart, toggleFavorite, isFavorite],
+    [items, cartOpen, cartCount, cartTotal, favorites, search, category, sort, selected, addToCart, removeFromCart, updateQty, clearCart, toggleFavorite, isFavorite, openProduct, closeProduct],
   );
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;

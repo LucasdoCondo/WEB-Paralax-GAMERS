@@ -5,7 +5,7 @@ import { discountPercent, formatBRL } from '@/data/products';
 import { useStore } from '@/store/StoreContext';
 
 export default function ProductCard({ product }: { product: Product }) {
-  const { addToCart, toggleFavorite, isFavorite } = useStore();
+  const { addToCart, toggleFavorite, isFavorite, openProduct } = useStore();
   const fav = isFavorite(product.id);
   const off = discountPercent(product);
 
@@ -15,8 +15,10 @@ export default function ProductCard({ product }: { product: Product }) {
       className="group relative overflow-hidden rounded-2xl border border-white/10 bg-[#12121a] transition-all duration-300 hover:-translate-y-1.5 hover:border-[#00f0ff]/50 hover:shadow-xl hover:shadow-[#00f0ff]/15"
     >
       <div className="relative h-48 overflow-hidden">
-        <img src={product.image} alt={product.name} loading="lazy"
-          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
+        <button onClick={() => openProduct(product)} aria-label={`Ver ${product.name}`} className="block h-full w-full cursor-pointer">
+          <img src={product.image} alt={product.name} loading="lazy"
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
+        </button>
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
         <div className="absolute left-3 top-3 flex gap-2">
           {off > 0 && <span className="rounded-full bg-red-500/90 px-2.5 py-1 text-xs font-bold text-white">-{off}%</span>}
@@ -29,7 +31,9 @@ export default function ProductCard({ product }: { product: Product }) {
       </div>
       <div className="p-4">
         <p className="text-[11px] font-semibold uppercase tracking-wider text-[#00f0ff]">{product.categoryLabel}</p>
-        <h3 className="mt-1 line-clamp-2 min-h-10 text-sm font-semibold text-slate-100">{product.name}</h3>
+        <button onClick={() => openProduct(product)} className="mt-1 block w-full text-left">
+          <h3 className="line-clamp-2 min-h-10 text-sm font-semibold text-slate-100 transition-colors hover:text-[#00f0ff]">{product.name}</h3>
+        </button>
         <ul className="mt-2 space-y-1">
           {product.specs.slice(0, 2).map((s) => (
             <li key={s.label} className="truncate text-xs text-slate-400">• {s.label}: {s.value}</li>

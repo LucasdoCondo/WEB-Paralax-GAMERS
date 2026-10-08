@@ -6,6 +6,7 @@ import ProductGrid from '@/components/products/ProductGrid';
 import BenefitsSection from '@/components/layout/BenefitsSection';
 import Footer from '@/components/layout/Footer';
 import CartDrawer from '@/components/cart/CartDrawer';
+import ProductModal from '@/components/products/ProductModal';
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
           </main>
           <Footer />
           <CartDrawer />
+          <ProductModal />
         </div>
       </StoreProvider>
     </ParallaxProvider>
